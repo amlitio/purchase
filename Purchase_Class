@@ -1,0 +1,232 @@
+package myGitHub;
+
+/*******************************************************
+ * Copyright © 2017-2018 Amlit LLC 
+ * All Rights Reserved
+ * 
+ * This file is part of the IOR Project 
+ * 
+ * this project can not be copied and/or distributed without the express
+ * permission of Amlit LLC
+ *******************************************************/
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.print.*;
+import javax.swing.event.*;
+import javax.swing.colorchooser.*;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+
+import java.awt.image.BufferedImage;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javafx.application.Application;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+
+
+
+ class Purchase extends JPanel implements Printable, ActionListener {
+
+	JButton approve;
+	JButton decline; 
+	JButton print;
+	JButton printt;
+	 JFrame frame1 = new JFrame( "Your Total" );
+	 JFrame frame = new JFrame( "Thank you For Shopping With Us!" );
+	  JLabel n1 = new JLabel();
+	  JLabel n = new JLabel();
+	  JLabel n2 = new JLabel();
+	  JSeparator s1 = new JSeparator();
+	  JPanel p1 = new JPanel();
+	  JPanel p = new JPanel();
+
+  Purchase() 
+	{
+	 buildGUI();
+	 yesPayment();
+	 noPayment();
+	 important();
+	 chopStix();
+	}
+	
+
+  //frame1
+	public void buildGUI() {
+	JFrame.setDefaultLookAndFeelDecorated(true);
+	  frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	  frame1.getContentPane().setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+	  frame1.setSize(new Dimension (500, 400) );
+	  frame1.add(p1);
+	  frame1.setBackground(Color.gray);
+	    JLabel label = new JLabel();
+	 	label.setIcon(new ImageIcon("image2.png"));		
+	 	frame1.add(label);
+	 	validate();
+	 	ImageIcon img = new ImageIcon ("iorlogo.png");
+	 	frame1.setIconImage(img.getImage());
+	  p1.add(n1);
+	  n1.setFont(new Font("Serif", Font.BOLD, 16));
+    n1.setText( "Your Total is $17.38: " );
+    n1.setLocation(0, 0);
+    n1.setLayout(new FlowLayout(FlowLayout.CENTER));
+    p1.add(new JSeparator(SwingConstants.HORIZONTAL));
+    approve = new JButton("Approve");
+	  decline = new JButton("Decline");
+	  p1.add(approve);
+	  p1.add(decline);
+	  frame1.setVisible(true);
+
+      
+    //2ND FRAME INFO
+	  p.add(n);
+	  n.setFont(new Font("Serif", Font.BOLD, 16));
+      n.setText("Would You Like To Scan Receipt Today?");
+      n.setLocation(0, 0);
+      n.setLayout(new FlowLayout(FlowLayout.CENTER));
+      p.add(n2);
+      n2.setText( "                                            " );
+      n2.setLayout(new FlowLayout(FlowLayout.CENTER));
+	  print = new JButton("Print Receipt");
+	  printt = new JButton("Generate IO Receipt");
+	  print.setLayout(new BorderLayout());
+	  printt.setLayout(new BorderLayout());
+	  printt.setBackground(new Color(55, 150, 250));
+	  p.add(print , BorderLayout.CENTER);
+	  p.add(printt , BorderLayout.CENTER);
+	  frame.setVisible(false);
+	}
+	
+
+	public void yesPayment() {
+    approve.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent arg0) {
+        	 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        	 frame.setPreferredSize(new Dimension (500, 400) );
+        	 frame.add(p);
+       	     frame.pack();
+       	     frame.setVisible(true);
+       	      System.out.println( "Payment Accepted By Customer " ); {
+    	  }
+        }
+    });
+}
+	
+	public void noPayment() {
+	decline.addActionListener(new ActionListener() {
+        //@Override
+        public void actionPerformed(ActionEvent e) {
+        	frame1.setVisible(false);
+         	  System.out.println( "Payment Denied By Customer " ); {	  
+        	  }
+        }
+    });
+}
+	
+//PRINT
+	public void important() {
+	 print.addActionListener( new ActionListener() {
+	   public void actionPerformed( ActionEvent ae ) {
+	      PrinterJob job = PrinterJob.getPrinterJob();
+	      job.setPrintable( new Purchase() );
+	      boolean doPrint = job.printDialog();
+	       if( doPrint ) {
+	        try {
+	        job.print();
+	       }  catch( PrinterException exc) {
+	            System.out.println( exc );
+	              }
+	       }  else {
+	            System.out.println("Print Cancelled");
+	      } 
+	   }
+	});
+}
+	
+//BUTTON
+	public void chopStix() {
+	 printt.addActionListener( new ActionListener() {
+		public void actionPerformed( ActionEvent ae ) {
+		  Application.launch(this.class, TOOL_TIP_TEXT_KEY);		
+			try {
+		   } catch (RuntimeException ex) {
+			  throw ex;
+		   } catch (Exception ex) {
+			  throw new RuntimeException(ex);
+		  }	
+		}	  
+	});
+}
+
+//Main
+	public static void main(String[] args) {
+	new Purchase ();
+	launch(args);
+	}
+	
+	private static void launch(String[] args) {
+	// 
+}
+
+	//@Override
+	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException
+		{
+		    if (pageIndex>0)
+		    {
+		  return NO_SUCH_PAGE;
+		    }
+		   StringBuffer s = new StringBuffer();
+		    for (int i=0;i<10;i++)
+		    {
+		        s.append("                   ")
+		        //s.append(System.getProperty("line.separator"));
+		        //s.append("\n")
+		        .append("Purchase         ")
+		        //s.append(System.getProperty("line.separator"));
+		        .append("======================")
+		        //s.append(System.getProperty("line.separator"));
+		        .append("Eggs - $3.99")
+		        //s.append(System.getProperty("line.separator"));
+		        .append("Yogurt - $1.00")
+		        //s.append(System.getProperty("line.separator"));
+		        .append("Protein - $12.39")
+		       //s.append(System.getProperty("line.separator"));
+		        .append("Subtotal = $16.99 ")
+		        //s.append(System.getProperty("line.separator"));
+		        .append("======")
+		        //s.append(System.getProperty("line.separator"));
+		        .append("Total = $17.38,")
+		        //s.append(System.getProperty("line.separator"));
+		        .append("======================");
+		        //s.append(System.getProperty("line.separator"));
+		        
+		    int x=(int) pageFormat.getImageableX();
+		    int y=(int) (pageFormat.getImageableY()+50);
+		    graphics.drawString(s.toString(), x, y);
+		    System.out.println(s);
+		   }
+		  return PAGE_EXISTS;
+	}
+	//@Override
+	public void actionPerformed(ActionEvent e) {
+		//
+	}
+	
+
+}
+ 
